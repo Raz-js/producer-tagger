@@ -219,8 +219,8 @@ export default function AudioWatermarker() {
               <Music className="h-5 w-5 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-foreground">Beat Watermarker</h1>
-              <p className="text-sm text-muted-foreground">Professional audio watermarking tool 𒀭 Raz</p>
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">Prod Tagger</h1>
+              <p className="text-sm text-muted-foreground">Beat watermarking tool 𒀭 Raz</p>
             </div>
           </div>
         </div>
