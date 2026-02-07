@@ -146,7 +146,7 @@
 
 /* Page background */
 body {
-  background: radial-gradient(circle at top, #200000, #000000 70%);
+  background: #cfc9b8;
 }
 
 /* Cards */
@@ -195,7 +195,8 @@ button[data-variant="default"] {
 }
 
 button:hover {
-  background: linear-gradient(180deg, #9f0000, #520000);
+  background: linear-gradient(180deg, #8c2a3a, #5a1622);
+  box-shadow: 0 0 18px rgba(180, 70, 100, 0.45);
 }
 
 /* Outline buttons */
@@ -245,4 +246,278 @@ button:has(svg) {
 
 button[data-variant="default"] {
   animation: bloodPulse 3s infinite;
+}
+
+/* ===== 1975 WINDOWS SKEUOMORPHISM ===== */
+:root {
+  --win-bg: #d7d1c0;
+  --win-panel: #e5dfcf;
+  --win-ink: #1f1d1a;
+  --win-ink-muted: #5c564a;
+  --win-border: #867f6c;
+  --win-shadow: #5b5548;
+  --win-highlight: #f9f4e5;
+  --win-title: #2d4e6c;
+  --win-title-text: #f2efe6;
+  --win-accent: #b38a3f;
+  --win-accent-dark: #7a5f2d;
+  --win-lofi: #f59db8;
+  --win-lofi-strong: #e45786;
+}
+
+.win-desktop {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.08) 0px,
+      rgba(255, 255, 255, 0.08) 1px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0) 4px
+    ),
+    radial-gradient(circle at top left, #eee8d8, #c9c2af 60%, #bdb5a2 100%);
+}
+
+.win-shell {
+  background: var(--win-bg);
+  border: 2px solid var(--win-border);
+  box-shadow:
+    inset 2px 2px 0 var(--win-highlight),
+    inset -2px -2px 0 var(--win-shadow),
+    0 18px 40px rgba(0, 0, 0, 0.25),
+    0 0 32px rgba(245, 157, 184, 0.22);
+  color: var(--win-ink);
+  font-family: "IBM Plex Mono", "Courier New", Courier, monospace;
+}
+
+.win-shell * {
+  text-shadow: none !important;
+}
+
+.win-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: linear-gradient(180deg, #3b5f7a, var(--win-title));
+  color: var(--win-title-text);
+  border-bottom: 2px solid #1e3344;
+  box-shadow: 0 8px 22px rgba(245, 157, 184, 0.18);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+}
+
+.win-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.win-title-icon {
+  width: 12px;
+  height: 12px;
+  background: var(--win-accent);
+  border: 1px solid var(--win-accent-dark);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.7),
+    0 0 10px rgba(245, 157, 184, 0.5);
+}
+
+.win-window-controls {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.win-control {
+  background: var(--win-panel);
+  color: var(--win-ink);
+  border: 1px solid var(--win-border);
+  box-shadow: inset 1px 1px 0 var(--win-highlight), inset -1px -1px 0 var(--win-shadow);
+  width: 22px;
+  height: 18px;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.win-menubar {
+  display: flex;
+  gap: 18px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--win-border);
+  background: var(--win-panel);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.win-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #f0ead9;
+  border-bottom: 2px solid var(--win-border);
+}
+
+.win-toolbar-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--win-ink);
+}
+
+.win-toolbar-title {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.win-pill {
+  padding: 2px 8px;
+  background: #e1d9c5;
+  border: 1px solid var(--win-border);
+  box-shadow: inset 1px 1px 0 var(--win-highlight);
+  font-size: 11px;
+}
+
+.win-content {
+  padding: 20px 18px 24px;
+}
+
+.win-banner {
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  background: #f7f1e0;
+  border: 1px solid var(--win-border);
+  box-shadow: inset 1px 1px 0 var(--win-highlight), inset -1px -1px 0 var(--win-shadow);
+}
+
+.win-panel {
+  background: var(--win-panel) !important;
+  border: 1px solid var(--win-border) !important;
+  box-shadow:
+    inset 1px 1px 0 var(--win-highlight),
+    inset -1px -1px 0 var(--win-shadow),
+    0 0 18px rgba(245, 157, 184, 0.18);
+}
+
+.win-field {
+  background: #f4eedb;
+  border: 1px solid var(--win-border);
+  padding: 10px;
+  box-shadow: inset 1px 1px 0 var(--win-highlight);
+}
+
+.win-dropzone {
+  width: 100%;
+  padding: 28px;
+  border: 2px dashed var(--win-border);
+  background: #f1ebd8;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow:
+    inset 2px 2px 0 var(--win-highlight),
+    inset -2px -2px 0 var(--win-shadow),
+    0 0 12px rgba(245, 157, 184, 0.16);
+}
+
+.win-dropzone:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    inset 2px 2px 0 var(--win-highlight),
+    inset -2px -2px 0 var(--win-shadow),
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    0 0 18px rgba(245, 157, 184, 0.35);
+}
+
+.win-button {
+  background: #efe8d4 !important;
+  color: var(--win-ink) !important;
+  border: 1px solid var(--win-border) !important;
+  box-shadow:
+    inset 1px 1px 0 var(--win-highlight),
+    inset -2px -2px 0 var(--win-shadow),
+    0 0 14px rgba(245, 157, 184, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.win-button:hover {
+  background: rgba(86, 144, 220, 0.28) !important;
+  box-shadow:
+    inset 1px 1px 0 var(--win-highlight),
+    inset -2px -2px 0 var(--win-shadow),
+    0 0 20px rgba(245, 157, 184, 0.4);
+}
+
+.win-button:disabled {
+  opacity: 0.6;
+  box-shadow: inset 1px 1px 0 var(--win-highlight);
+}
+
+.win-audio {
+  padding: 12px;
+  border: 1px solid var(--win-border);
+  background: #f6f0dd;
+  box-shadow:
+    inset 1px 1px 0 var(--win-highlight),
+    inset -1px -1px 0 var(--win-shadow),
+    0 0 14px rgba(245, 157, 184, 0.2);
+}
+
+.win-statusbar {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #ede6d2;
+  border-top: 2px solid var(--win-border);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.win-shell .text-muted-foreground {
+  color: var(--win-ink-muted) !important;
+}
+
+.win-shell h1,
+.win-shell h2,
+.win-shell h3,
+.win-shell label {
+  color: #120b12 !important;
+  text-shadow: none !important;
+}
+
+.win-shell p {
+  color: var(--win-ink-muted) !important;
+}
+
+.win-shell svg {
+  color: var(--win-accent-dark);
+  filter: none;
+}
+
+.win-shell button:hover,
+.win-shell button[data-variant="default"]:hover,
+.win-shell button[data-variant="outline"]:hover {
+  background: rgba(70, 130, 220, 0.32) !important;
+}
+
+.win-shell [role="slider"] {
+  background: var(--win-accent) !important;
+  border: 1px solid var(--win-accent-dark);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.6),
+    0 0 10px rgba(245, 157, 184, 0.35);
+}
+
+.win-shell [data-orientation="horizontal"] {
+  background: #d6ceb9 !important;
+}
+
+.win-shell button[data-variant="default"] {
+  animation: none;
 }

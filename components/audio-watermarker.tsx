@@ -115,7 +115,7 @@ export default function AudioWatermarker() {
       setWatermarkedBlob(wavBlob)
       setPreviewType("watermarked")
     } catch (error) {
-      console.error("[v0] Error processing audio:", error)
+      console.error("[Raz] Error processing audio:", error)
       alert("Error processing audio. Please try different files.")
     } finally {
       setProcessing(false)
@@ -210,232 +210,250 @@ export default function AudioWatermarker() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="border-b border-border blood-background blood-card">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-              <Music className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-foreground">Prod Tagger</h1>
-              <p className="text-sm text-muted-foreground">Beat watermarking tool 𒀭 Raz</p>
-            </div>
+    <div className="min-h-screen flex items-start justify-center py-10 px-4">
+      <div className="win-shell w-full max-w-6xl">
+        <div className="win-titlebar">
+          <div className="win-title">
+            <span className="win-title-icon" aria-hidden="true" />
+            Prod Tagger - Audio Utility
+          </div>
+          <div className="win-window-controls" aria-hidden="true">
+            <button type="button" className="win-control">_</button>
+            <button type="button" className="win-control">[]</button>
+            <button type="button" className="win-control">X</button>
           </div>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <div className="flex-1 container mx-auto px-4 py-8">
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Upload Section */}
-          <div className="space-y-6">
-            {/* Main Audio Upload */}
-            <Card className="p-6">
-              <div className="space-y-4">
-                <div>
-                  <Label className="text-base font-semibold">Main Audio File</Label>
-                  <p className="text-sm text-muted-foreground">Upload your beat or audio track</p>
-                </div>
+        <div className="win-menubar">
+          <span>File</span>
+          <span>Edit</span>
+          <span>Options</span>
+          <span>Help</span>
+        </div>
 
-                <input
-                  ref={mainInputRef}
-                  type="file"
-                  accept="audio/*"
-                  onChange={handleMainAudioUpload}
-                  className="hidden"
-                />
+        <div className="win-toolbar">
+          <div className="win-toolbar-group">
+            <Music className="h-4 w-4" />
+            <span className="win-toolbar-title">Beat Watermarker</span>
+          </div>
+          <div className="win-toolbar-group">
+            <span className="win-pill">SESSION: LOCAL</span>
+            <span className="win-pill">FORMAT: WAV</span>
+          </div>
+        </div>
 
-                <button
-                  onClick={() => mainInputRef.current?.click()}
-                  className="w-full rounded-lg border-2 border-dashed border-border bg-muted/50 p-8 transition-colors hover:bg-muted hover:border-primary"
-                >
-                  <div className="flex flex-col items-center gap-2">
-                    <Upload className="h-8 w-8 text-muted-foreground" />
-                    <div className="text-center">
-                      <p className="font-medium text-foreground">
-                        {mainAudio ? mainAudio.name : "Click to upload main audio"}
-                      </p>
-                      <p className="text-sm text-muted-foreground">Supports MP3, WAV, OGG, and more</p>
-                    </div>
-                  </div>
-                </button>
-              </div>
-            </Card>
-
-            {/* Watermark Upload */}
-            <Card className="p-6">
-              <div className="space-y-4">
-                <div>
-                  <Label className="text-base font-semibold">Watermark Audio</Label>
-                  <p className="text-sm text-muted-foreground">Upload your watermark tag (keep it short)</p>
-                </div>
-
-                <input
-                  ref={watermarkInputRef}
-                  type="file"
-                  accept="audio/*"
-                  onChange={handleWatermarkUpload}
-                  className="hidden"
-                />
-
-                <button
-                  onClick={() => watermarkInputRef.current?.click()}
-                  className="w-full rounded-lg border-2 border-dashed border-border bg-muted/50 p-8 transition-colors hover:bg-muted hover:border-primary"
-                >
-                  <div className="flex flex-col items-center gap-2">
-                    <Volume2 className="h-8 w-8 text-muted-foreground" />
-                    <div className="text-center">
-                      <p className="font-medium text-foreground">
-                        {watermarkAudio ? watermarkAudio.name : "Click to upload watermark"}
-                      </p>
-                      <p className="text-sm text-muted-foreground">Short audio tag or voice clip</p>
-                    </div>
-                  </div>
-                </button>
-              </div>
-            </Card>
+        <div className="win-content">
+          <div className="win-banner">
+            <h1 className="text-xl font-bold">Prod Tagger</h1>
+            <p className="text-sm text-muted-foreground">Beat watermarking tool by Raz</p>
           </div>
 
-          {/* Settings & Preview Section */}
-          <div className="space-y-6">
-            {/* Settings */}
-            <Card className="p-6">
-              <div className="space-y-6">
-                <div>
-                  <Label className="text-base font-semibold">Watermark Settings</Label>
-                  <p className="text-sm text-muted-foreground">Adjust spacing and volume</p>
-                </div>
-
-                {/* Interval Slider */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-sm font-medium">Interval (seconds)</Label>
-                    <span className="text-sm font-mono text-muted-foreground">{watermarkInterval}s</span>
-                  </div>
-                  <Slider
-                    value={[watermarkInterval]}
-                    onValueChange={(value) => setWatermarkInterval(value[0])}
-                    min={5}
-                    max={60}
-                    step={1}
-                    className="w-full"
-                  />
-                  <p className="text-xs text-muted-foreground">How often the watermark repeats</p>
-                </div>
-
-                {/* Volume Slider */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-sm font-medium">Watermark Volume</Label>
-                    <span className="text-sm font-mono text-muted-foreground">{watermarkVolume}%</span>
-                  </div>
-                  <Slider
-                    value={[watermarkVolume]}
-                    onValueChange={(value) => setWatermarkVolume(value[0])}
-                    min={10}
-                    max={100}
-                    step={5}
-                    className="w-full"
-                  />
-                  <p className="text-xs text-muted-foreground">Balance between audible and subtle</p>
-                </div>
-
-                {/* Process Button */}
-                <Button
-                  onClick={processAudio}
-                  disabled={!mainAudio || !watermarkAudio || processing}
-                  className="w-full"
-                  size="lg"
-                >
-                  {processing ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    "Apply Watermark"
-                  )}
-                </Button>
-              </div>
-            </Card>
-
-            {/* Preview & Download */}
-            {(mainAudio || watermarkedBlob) && (
-              <Card className="p-6">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="space-y-6">
+              <Card className="win-panel p-6">
                 <div className="space-y-4">
                   <div>
-                    <Label className="text-base font-semibold">Preview & Download</Label>
-                    <p className="text-sm text-muted-foreground">
-                      {watermarkedBlob ? "Watermarked audio ready" : "Original audio loaded"}
-                    </p>
+                    <Label className="text-base font-semibold">Main Audio File</Label>
+                    <p className="text-sm text-muted-foreground">Upload your beat or audio track</p>
                   </div>
 
-                  {/* Preview Toggle */}
-                  {watermarkedBlob && (
-                    <div className="flex gap-2">
-                      <Button
-                        variant={previewType === "original" ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setPreviewType("original")}
-                        className="flex-1"
-                      >
-                        Original
-                      </Button>
-                      <Button
-                        variant={previewType === "watermarked" ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setPreviewType("watermarked")}
-                        className="flex-1"
-                      >
-                        Watermarked
-                      </Button>
+                  <input
+                    ref={mainInputRef}
+                    type="file"
+                    accept="audio/*"
+                    onChange={handleMainAudioUpload}
+                    className="hidden"
+                  />
+
+                  <button
+                    onClick={() => mainInputRef.current?.click()}
+                    className="win-dropzone"
+                  >
+                    <div className="flex flex-col items-center gap-2">
+                      <Upload className="h-7 w-7" />
+                      <div className="text-center">
+                        <p className="font-medium">
+                          {mainAudio ? mainAudio.name : "Click to upload main audio"}
+                        </p>
+                        <p className="text-sm text-muted-foreground">MP3, WAV, OGG, and more</p>
+                      </div>
                     </div>
-                  )}
-
-                  {/* Audio Player */}
-                  <div className="rounded-lg bg-muted p-4">
-                    <audio 
-                      ref={audioRef} 
-                      src={getPreviewUrl()} 
-                      onEnded={handleAudioEnded} 
-                      controls
-                      className="w-full"
-                      onError={(e) => {
-                        console.error('Audio loading error:', e)
-                        alert('Error loading audio. Please check the file format.')
-                      }}
-                    />
-
-                  </div>
-
-                  {/* Download Button */}
-                  {watermarkedBlob && (
-                    <Button onClick={downloadWatermarked} variant="outline" className="w-full bg-transparent" size="lg">
-                      <Download className="mr-2 h-4 w-4" />
-                      Download Watermarked Audio
-                    </Button>
-                  )}
+                  </button>
                 </div>
               </Card>
-            )}
+
+              <Card className="win-panel p-6">
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-base font-semibold">Watermark Audio</Label>
+                    <p className="text-sm text-muted-foreground">Upload your watermark tag (keep it short)</p>
+                  </div>
+
+                  <input
+                    ref={watermarkInputRef}
+                    type="file"
+                    accept="audio/*"
+                    onChange={handleWatermarkUpload}
+                    className="hidden"
+                  />
+
+                  <button
+                    onClick={() => watermarkInputRef.current?.click()}
+                    className="win-dropzone"
+                  >
+                    <div className="flex flex-col items-center gap-2">
+                      <Volume2 className="h-7 w-7" />
+                      <div className="text-center">
+                        <p className="font-medium">
+                          {watermarkAudio ? watermarkAudio.name : "Click to upload watermark"}
+                        </p>
+                        <p className="text-sm text-muted-foreground">Short audio tag or voice clip</p>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </Card>
+            </div>
+
+            <div className="space-y-6">
+              <Card className="win-panel p-6">
+                <div className="space-y-6">
+                  <div>
+                    <Label className="text-base font-semibold">Watermark Settings</Label>
+                    <p className="text-sm text-muted-foreground">Adjust spacing and volume</p>
+                  </div>
+
+                  <div className="win-field space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-sm font-medium">Interval (seconds)</Label>
+                      <span className="text-sm font-mono text-muted-foreground">{watermarkInterval}s</span>
+                    </div>
+                    <Slider
+                      value={[watermarkInterval]}
+                      onValueChange={(value) => setWatermarkInterval(value[0])}
+                      min={5}
+                      max={60}
+                      step={1}
+                      className="w-full"
+                    />
+                    <p className="text-xs text-muted-foreground">How often the watermark repeats</p>
+                  </div>
+
+                  <div className="win-field space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-sm font-medium">Watermark Volume</Label>
+                      <span className="text-sm font-mono text-muted-foreground">{watermarkVolume}%</span>
+                    </div>
+                    <Slider
+                      value={[watermarkVolume]}
+                      onValueChange={(value) => setWatermarkVolume(value[0])}
+                      min={10}
+                      max={100}
+                      step={5}
+                      className="w-full"
+                    />
+                    <p className="text-xs text-muted-foreground">Balance between audible and subtle</p>
+                  </div>
+
+                  <Button
+                    onClick={processAudio}
+                    disabled={!mainAudio || !watermarkAudio || processing}
+                    className="win-button w-full"
+                    size="lg"
+                  >
+                    {processing ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      "Apply Watermark"
+                    )}
+                  </Button>
+                </div>
+              </Card>
+
+              {(mainAudio || watermarkedBlob) && (
+                <Card className="win-panel p-6">
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-base font-semibold">Preview & Download</Label>
+                      <p className="text-sm text-muted-foreground">
+                        {watermarkedBlob ? "Watermarked audio ready" : "Original audio loaded"}
+                      </p>
+                    </div>
+
+                    {watermarkedBlob && (
+                      <div className="flex gap-2">
+                        <Button
+                          variant={previewType === "original" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setPreviewType("original")}
+                          className="win-button flex-1"
+                        >
+                          Original
+                        </Button>
+                        <Button
+                          variant={previewType === "watermarked" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setPreviewType("watermarked")}
+                          className="win-button flex-1"
+                        >
+                          Watermarked
+                        </Button>
+                      </div>
+                    )}
+
+                    <div className="win-audio">
+                      <audio
+                        ref={audioRef}
+                        src={getPreviewUrl()}
+                        onEnded={handleAudioEnded}
+                        controls
+                        className="w-full"
+                        onError={(e) => {
+                          console.error('Audio loading error:', e)
+                          alert('Error loading audio. Please check the file format.')
+                        }}
+                      />
+                    </div>
+
+                    {watermarkedBlob && (
+                      <Button
+                        onClick={downloadWatermarked}
+                        variant="outline"
+                        className="win-button w-full"
+                        size="lg"
+                      >
+                        <Download className="mr-2 h-4 w-4" />
+                        Download Watermarked Audio
+                      </Button>
+                    )}
+                  </div>
+                </Card>
+              )}
+            </div>
           </div>
+
+          <Card className="win-panel mt-8 p-6">
+            <div className="space-y-2">
+              <h3 className="font-semibold">How it works</h3>
+              <ul className="space-y-1 text-sm text-muted-foreground">
+                <li>• Upload your main beat and a short watermark audio clip</li>
+                <li>• Adjust the interval to control how often the watermark appears</li>
+                <li>• Set the volume to balance protection with listenability</li>
+                <li>• The watermark will be mixed throughout the entire track</li>
+                <li>• Download the watermarked version as a WAV file</li>
+              </ul>
+            </div>
+          </Card>
         </div>
 
-        {/* Info Section */}
-        <Card className="mt-8 p-6 bg-accent/50">
-          <div className="space-y-2">
-            <h3 className="font-semibold text-foreground">How it works</h3>
-            <ul className="space-y-1 text-sm text-muted-foreground">
-              <li>• Upload your main beat and a short watermark audio clip</li>
-              <li>• Adjust the interval to control how often the watermark appears</li>
-              <li>• Set the volume to balance protection with listenability</li>
-              <li>• The watermark will be mixed throughout the entire track</li>
-              <li>• Download the watermarked version as a WAV file</li>
-            </ul>
-          </div>
-        </Card>
+        <div className="win-statusbar">
+          <span>Ready</span>
+          <span>{mainAudio ? `Loaded: ${mainAudio.name}` : "No main audio loaded"}</span>
+          <span>{watermarkAudio ? `Tag: ${watermarkAudio.name}` : "No watermark tag"}</span>
+        </div>
       </div>
     </div>
   )
