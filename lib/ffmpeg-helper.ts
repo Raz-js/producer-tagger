@@ -1,7 +1,7 @@
 // ffmpeg-helper.ts: Utility to convert WAV (ArrayBuffer/Blob) to MP3 using ffmpeg.wasm
 export async function wavToMp3(wavBlob: Blob): Promise<Blob> {
   // Dynamically import ffmpeg.wasm only in the browser
-  const ffmpegModule = await import('@ffmpeg/ffmpeg/dist/ffmpeg.min.js');
+  const ffmpegModule = await import('@ffmpeg/ffmpeg');
   const createFFmpeg = ffmpegModule.createFFmpeg;
   const fetchFile = ffmpegModule.fetchFile;
   const ffmpeg = createFFmpeg({ log: false });
