@@ -115,7 +115,14 @@ export default function AudioWatermarker() {
       if (outputType === 'mp3') {
         // Convert outputBuffer to WAV first, then to MP3 using ffmpeg.wasm
         const wavBlob = audioBufferToWav(outputBuffer)
-        outBlob = await wavToMp3(wavBlob)
+        try {
+          outBlob = await wavToMp3(wavBlob)
+        } catch (ffErr) {
+          console.error('[Raz] MP3 conversion failed, falling back to WAV:', ffErr)
+          // fallback to WAV if mp3 conversion fails
+          outBlob = wavBlob
+          alert('MP3 conversion failed in the browser — saved as WAV instead.')
+        }
       } else {
         outBlob = audioBufferToWav(outputBuffer)
       }
