@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState, useRef } from "react"
+import { encodeMp3 } from "@/lib/mp3-encoder"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -18,6 +19,7 @@ export default function AudioWatermarker() {
   const [watermarkedBlob, setWatermarkedBlob] = useState<Blob | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [previewType, setPreviewType] = useState<"original" | "watermarked">("original")
+  const [outputType, setOutputType] = useState<'mp3' | 'wav'>("mp3") // default mp3
 
   const audioRef = useRef<HTMLAudioElement>(null)
   const mainInputRef = useRef<HTMLInputElement>(null)
@@ -47,7 +49,6 @@ export default function AudioWatermarker() {
       // Check if AudioContext is suspended (requires user interaction)
       const audioContext = new AudioContext()
       if (audioContext.state === 'suspended') {
-        // Resume AudioContext - this requires user interaction
         await audioContext.resume()
       }
 
@@ -62,7 +63,6 @@ export default function AudioWatermarker() {
       // Calculate output length
       const sampleRate = mainAudioBuffer.sampleRate
       const mainDuration = mainAudioBuffer.duration
-      const watermarkDuration = watermarkAudioBuffer.duration
       const intervalSeconds = watermarkInterval
 
       // Create output buffer
@@ -110,9 +110,14 @@ export default function AudioWatermarker() {
         currentTime += intervalSeconds
       }
 
-      // Convert to WAV
-      const wavBlob = audioBufferToWav(outputBuffer)
-      setWatermarkedBlob(wavBlob)
+      // Export to selected format
+      let outBlob: Blob
+      if (outputType === 'mp3') {
+        outBlob = await encodeMp3(outputBuffer)
+      } else {
+        outBlob = audioBufferToWav(outputBuffer)
+      }
+      setWatermarkedBlob(outBlob)
       setPreviewType("watermarked")
     } catch (error) {
       console.error("[Raz] Error processing audio:", error)
@@ -173,7 +178,8 @@ export default function AudioWatermarker() {
     const url = URL.createObjectURL(watermarkedBlob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `watermarked_${mainAudio?.name || "audio"}.wav`
+    const ext = outputType === 'mp3' ? 'mp3' : 'wav'
+    a.download = `watermarked_${mainAudio?.name?.replace(/\.[^/.]+$/, "") || "audio"}.${ext}`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -238,8 +244,34 @@ export default function AudioWatermarker() {
           </div>
           <div className="win-toolbar-group">
             <span className="win-pill">SESSION: LOCAL</span>
-            <span className="win-pill">FORMAT: WAV</span>
+            <span className="win-pill">FORMAT: {outputType.toUpperCase()}</span>
           </div>
+                  <div className="win-field space-y-3">
+                    <Label className="text-sm font-medium">Output File Type</Label>
+                    <div className="flex gap-4">
+                      <label className="flex items-center gap-1 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="outputType"
+                          value="mp3"
+                          checked={outputType === 'mp3'}
+                          onChange={() => setOutputType('mp3')}
+                        />
+                        MP3
+                      </label>
+                      <label className="flex items-center gap-1 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="outputType"
+                          value="wav"
+                          checked={outputType === 'wav'}
+                          onChange={() => setOutputType('wav')}
+                        />
+                        WAV
+                      </label>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Choose output format (default: MP3)</p>
+                  </div>
         </div>
 
         <div className="win-content">
@@ -443,7 +475,7 @@ export default function AudioWatermarker() {
                 <li>• Adjust the interval to control how often the watermark appears</li>
                 <li>• Set the volume to balance protection with listenability</li>
                 <li>• The watermark will be mixed throughout the entire track</li>
-                <li>• Download the watermarked version as a WAV file</li>
+                <li>• Download the watermarked version as MP3 or WAV</li>
               </ul>
             </div>
           </Card>
