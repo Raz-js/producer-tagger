@@ -1,6 +1,4 @@
 "use client"
-
-import { wavToMp3 } from "@/lib/ffmpeg-helper"
 import type React from "react"
 import { useState, useRef } from "react"
 
@@ -113,15 +111,18 @@ export default function AudioWatermarker() {
       // Export to selected format
       let outBlob: Blob
       if (outputType === 'mp3') {
-        // Convert outputBuffer to WAV first, then to MP3 using ffmpeg.wasm
+        // Convert outputBuffer to WAV first, then POST to serverless API to encode MP3
         const wavBlob = audioBufferToWav(outputBuffer)
         try {
-          outBlob = await wavToMp3(wavBlob)
-        } catch (ffErr) {
-          console.error('[Raz] MP3 conversion failed, falling back to WAV:', ffErr)
-          // fallback to WAV if mp3 conversion fails
+          const form = new FormData()
+          form.append('file', new Blob([await wavBlob.arrayBuffer()], { type: 'audio/wav' }), 'watermark.wav')
+          const res = await fetch('/api/encode', { method: 'POST', body: form })
+          if (!res.ok) throw new Error('Server encoding failed')
+          outBlob = await res.blob()
+        } catch (err) {
+          console.error('[Raz] server mp3 encode failed, falling back to WAV:', err)
           outBlob = wavBlob
-          alert('MP3 conversion failed in the browser — saved as WAV instead.')
+          alert('MP3 conversion failed on server — saved as WAV instead.')
         }
       } else {
         outBlob = audioBufferToWav(outputBuffer)
