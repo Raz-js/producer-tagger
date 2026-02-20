@@ -1,9 +1,10 @@
+import { wavToMp3 } from "@/lib/ffmpeg-helper"
 "use client"
 
 import type React from "react"
 
 import { useState, useRef } from "react"
-import { encodeMp3 } from "@/lib/mp3-encoder"
+
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -113,7 +114,9 @@ export default function AudioWatermarker() {
       // Export to selected format
       let outBlob: Blob
       if (outputType === 'mp3') {
-        outBlob = await encodeMp3(outputBuffer)
+        // Convert outputBuffer to WAV first, then to MP3 using ffmpeg.wasm
+        const wavBlob = audioBufferToWav(outputBuffer)
+        outBlob = await wavToMp3(wavBlob)
       } else {
         outBlob = audioBufferToWav(outputBuffer)
       }

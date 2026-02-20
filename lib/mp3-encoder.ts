@@ -1,20 +1,18 @@
 // This file provides a function to encode AudioBuffer to MP3 using lamejs
 // Usage: encodeMp3(audioBuffer: AudioBuffer) => Promise<Blob>
 
-// Use dynamic import to avoid Next.js SSR issues and ensure MPEGMode is defined
 
-let Mp3Encoder: any = null
 
-async function getMp3Encoder() {
-  if (!Mp3Encoder) {
-    const lamejs = await import('lamejs')
+  // Use require here to ensure MPEGMode is defined in the browser bundle (Vercel/Next.js fix)
+  let lamejs: any
+  let Mp3Encoder: any
+  if (typeof window !== 'undefined') {
+    lamejs = require('lamejs')
+    Mp3Encoder = lamejs.Mp3Encoder
+  } else {
+    lamejs = await import('lamejs')
     Mp3Encoder = lamejs.Mp3Encoder
   }
-  return Mp3Encoder
-}
-
-export async function encodeMp3(buffer: AudioBuffer): Promise<Blob> {
-  const Mp3Encoder = await getMp3Encoder()
   const numChannels = buffer.numberOfChannels
   const sampleRate = buffer.sampleRate
   const mp3Encoder = new Mp3Encoder(numChannels, sampleRate, 128)
