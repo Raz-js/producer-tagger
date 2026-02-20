@@ -244,20 +244,33 @@ export default function AudioWatermarker() {
           </div>
           <div className="win-toolbar-group">
             <span className="win-pill">SESSION: LOCAL</span>
-            <span className="win-pill">FORMAT: {outputType.toUpperCase()}</span>
+            <span className="win-pill" style={{ position: 'relative', minWidth: 90 }}>
+              FORMAT:
+              <select
+                value={outputType}
+                onChange={e => setOutputType(e.target.value as 'mp3' | 'wav')}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'inherit',
+                  fontWeight: 'bold',
+                  outline: 'none',
+                  marginLeft: 4,
+                  cursor: 'pointer',
+                  appearance: 'none',
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'none',
+                  paddingRight: 18
+                }}
+                className="focus:outline-none"
+                aria-label="Select output format"
+              >
+                <option value="mp3">MP3</option>
+                <option value="wav">WAV</option>
+              </select>
+            </span>
           </div>
-                  <div className="win-field space-y-3">
-                    <Label className="text-sm font-medium">Output File Type</Label>
-                    <select
-                      className="win-input w-full p-2 border rounded"
-                      value={outputType}
-                      onChange={e => setOutputType(e.target.value as 'mp3' | 'wav')}
-                    >
-                      <option value="mp3">MP3 (Recommended)</option>
-                      <option value="wav">WAV</option>
-                    </select>
-                    <p className="text-xs text-muted-foreground">Choose output format (default: MP3)</p>
-                  </div>
+                  {/* Output file type selection moved to toolbar FORMAT pill */}
         </div>
 
         <div className="win-content">
