@@ -1,12 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { NextResponse } from 'next/server'
-import ffmpeg from 'fluent-ffmpeg'
-import ffmpegPath from 'ffmpeg-static'
 
-export const runtime = 'nodejs'
-
-ffmpeg.setFfmpegPath(ffmpegPath as string)
 
 export async function POST(req: Request) {
   try {
@@ -19,33 +14,17 @@ export async function POST(req: Request) {
 
     const tmpDir = process.env.TMPDIR || '/tmp'
     const id = Date.now().toString()
-    const inPath = path.join(tmpDir, `input-${id}.wav`)
-    const outPath = path.join(tmpDir, `output-${id}.mp3`)
+    // Optionally, send buffer to an external wav-to-mp3 API here
+    // Example placeholder:
+    // const mp3Buffer = await convertWavToMp3(buffer);
+    // return new Response(mp3Buffer, { ... });
 
-    await fs.promises.writeFile(inPath, buffer)
-
-    await new Promise<void>((resolve, reject) => {
-      ffmpeg(inPath)
-        .audioCodec('libmp3lame')
-        .audioQuality(2)
-        .on('end', () => resolve())
-        .on('error', (err: any) => reject(err))
-        .save(outPath)
-    })
-
-    const outBuffer = await fs.promises.readFile(outPath)
-
-    // cleanup
-    ;(async () => {
-      try { await fs.promises.unlink(inPath) } catch {};
-      try { await fs.promises.unlink(outPath) } catch {};
-    })()
-
-    return new Response(outBuffer, {
+    // For now, just return the original wav file
+    return new Response(buffer, {
       status: 200,
       headers: {
-        'Content-Type': 'audio/mpeg',
-        'Content-Disposition': 'attachment; filename="watermarked.mp3"',
+        'Content-Type': 'audio/wav',
+        'Content-Disposition': 'attachment; filename="audio.wav"',
       },
     })
   } catch (err) {
