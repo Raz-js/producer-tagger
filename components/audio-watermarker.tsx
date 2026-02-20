@@ -248,28 +248,14 @@ export default function AudioWatermarker() {
           </div>
                   <div className="win-field space-y-3">
                     <Label className="text-sm font-medium">Output File Type</Label>
-                    <div className="flex gap-4">
-                      <label className="flex items-center gap-1 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="outputType"
-                          value="mp3"
-                          checked={outputType === 'mp3'}
-                          onChange={() => setOutputType('mp3')}
-                        />
-                        MP3
-                      </label>
-                      <label className="flex items-center gap-1 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="outputType"
-                          value="wav"
-                          checked={outputType === 'wav'}
-                          onChange={() => setOutputType('wav')}
-                        />
-                        WAV
-                      </label>
-                    </div>
+                    <select
+                      className="win-input w-full p-2 border rounded"
+                      value={outputType}
+                      onChange={e => setOutputType(e.target.value as 'mp3' | 'wav')}
+                    >
+                      <option value="mp3">MP3 (Recommended)</option>
+                      <option value="wav">WAV</option>
+                    </select>
                     <p className="text-xs text-muted-foreground">Choose output format (default: MP3)</p>
                   </div>
         </div>
